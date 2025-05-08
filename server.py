@@ -29,3 +29,15 @@ class TupleSpaceServer:
                     threading.Thread(target=self.handle_client, args=(client_socket,)).start()
             except socket.error as e:
                 print(f"Error starting server: {e}")
+
+        def handle_client(self, client_socket):
+            try:
+                with client_socket:
+                    while True:
+                        request = client_socket.recv(1024).decode('utf-8')
+                        if not request:
+                            break
+                        response = self.process_request(request)
+                        client_socket.send(response.encode('utf-8'))
+            except socket.error as e:
+                print(f"Error handling client: {e}")
