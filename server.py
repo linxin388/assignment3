@@ -62,3 +62,30 @@ class TupleSpaceServer:
                     self.error_count +=1
                     response = "024 ERR invalid command"
                 return response
+        def process_read(self,key):
+            value = self.tuple_space.get(key)
+            if value:
+                response = f"{len(f'OK({key},{value})read'):03d}OK({key},{value})read"
+            else:
+                self.error_count +=1
+                response = "024 ERR " + key + " does not exist"
+            return response
+
+        def process_get(self, key):
+            value = self.tuple_space.pop(key, None)
+            if value:
+                response = f"{len(f'OK ({key}, {value}) removed'):03d} OK ({key}, {value}) removed"
+            else:
+                self.error_count += 1
+                response = "024 ERR " + key + " does not exist"
+            return response
+
+        def process_put(self, key, value):
+            if key in self.tuple_space:
+                self.error_count += 1
+                response = "024 ERR " + key + " already exists"
+            else:
+                self.tuple_space[key] = value
+                response = f"{len(f'OK ({key}, {value}) added'):03d} OK ({key}, {value}) added"
+            return response
+
