@@ -122,3 +122,16 @@ class TupleSpaceServer:
                 self.server_port = server_port
                 self.request_file_path = request_file_path
 
+            def send_requests(self):
+                try:
+                    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as client_socket:
+                        client_socket.connect((self.server_host, self.server_port))
+                        with open(self.request_file_path, 'r') as request_file:
+                            for line in request_file:
+                                request = self.create_request(line.strip())
+                                client_socket.send(request.encode('utf-8'))
+                                response = client_socket.recv(1024).decode('utf-8')
+                                print(f"{line.strip()}: {response}")
+                except socket.error as e:
+                    print(f"Error sending requests: {e}")
+
