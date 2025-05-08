@@ -13,3 +13,10 @@ class TupleSpaceServer:
         self.get_count = 0
         self.put_count = 0
         self.error_count = 0
+
+        def start_server(self):
+            try:
+                server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+                server_socket.bind(('0.0.0.0', self.port))
+                server_socket.listen(5)
+                print(f"Server started on port {self.port}")
