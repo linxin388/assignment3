@@ -41,3 +41,24 @@ class TupleSpaceServer:
                         client_socket.send(response.encode('utf-8'))
             except socket.error as e:
                 print(f"Error handling client: {e}")
+        def process_request(self, request):
+            self.operation_count +=1
+            command = request[3]
+            key = request[5:].split('')[0]
+            value = request[5:].split('',1)[1]if command == 'P'else''
+
+            response = ""
+            with threading.Lock():
+                if command == 'R':
+                    self.read_count +=1
+                    response = self.process_read(key)
+                elif command == 'G':
+                    self.get_count +=1
+                    response=self.process_get(key)
+                elif command == 'P':
+                    self.put_count +=1
+                    response = self.process_put(key,value)
+                else:
+                    self.error_count +=1
+                    response = "024 ERR invalid command"
+                return response
