@@ -89,3 +89,30 @@ class TupleSpaceServer:
                 response = f"{len(f'OK ({key}, {value}) added'):03d} OK ({key}, {value}) added"
             return response
 
+        def print_tuple_space_summary(self):
+            while True:
+                try:
+                    time.sleep(10)
+                    tuple_count = len(self.tuple_space)
+                    total_tuple_size = sum(len(key) + len(value) for key, value in self.tuple_space.items())
+                    total_key_size = sum(len(key) for key in self.tuple_space.keys())
+                    total_value_size = sum(len(value) for value in self.tuple_space.values())
+                    average_tuple_size = total_tuple_size / tuple_count if tuple_count else 0
+                    average_key_size = total_key_size / tuple_count if tuple_count else 0
+                    average_value_size = total_value_size / tuple_count if tuple_count else 0
+
+                    print("Tuple Space Summary:")
+                    print(f"Number of tuples: {tuple_count}")
+                    print(f"Average tuple size: {average_tuple_size}")
+                    print(f"Average key size: {average_key_size}")
+                    print(f"Average value size: {average_value_size}")
+                    print(f"Total number of clients: {self.client_count}")
+                    print(f"Total number of operations: {self.operation_count}")
+                    print(f"Total READs: {self.read_count}")
+                    print(f"Total GETs: {self.get_count}")
+                    print(f"Total PUTs: {self.put_count}")
+                    print(f"Total errors: {self.error_count}")
+                except Exception as e:
+                    print(f"Error printing summary: {e}")
+                    break
+
