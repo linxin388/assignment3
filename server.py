@@ -147,3 +147,21 @@ class TupleSpaceServer:
                     request = f"{len(f'{command[0]} {key}'):03d} {command[0]} {key}"
                 return request
 
+            if __name__ == "__main__":
+                    import sys
+
+                    if len(sys.argv) == 2:
+                        port = int(sys.argv[1])
+                        server = TupleSpaceServer(port)
+                        server.start_server()
+                    elif len(sys.argv) == 4:
+                        server_host = sys.argv[1]
+                        server_port = int(sys.argv[2])
+                        request_file_path = sys.argv[3]
+                        client = TupleSpaceClient(server_host, server_port, request_file_path)
+                        client.send_requests()
+                    else:
+                        print(
+                            "Usage: python script.py <serverPort> for server or python script.py <serverHost> <serverPort> <requestFilePath> for client")
+
+
