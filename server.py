@@ -135,3 +135,15 @@ class TupleSpaceServer:
                 except socket.error as e:
                     print(f"Error sending requests: {e}")
 
+            def create_request(self, line):
+                parts = line.split(' ')
+                command = parts[0]
+                key = parts[1]
+                value = parts[2] if len(parts) > 2 else ''
+
+                if command == 'PUT':
+                    request = f"{len(f'P {key} {value}'):03d} P {key} {value}"
+                else:
+                    request = f"{len(f'{command[0]} {key}'):03d} {command[0]} {key}"
+                return request
+
