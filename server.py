@@ -116,3 +116,9 @@ class TupleSpaceServer:
                     print(f"Error printing summary: {e}")
                     break
 
+        class TupleSpaceClient:
+            def __init__(self, server_host, server_port, request_file_path):
+                self.server_host = server_host
+                self.server_port = server_port
+                self.request_file_path = request_file_path
+
